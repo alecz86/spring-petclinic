@@ -13,9 +13,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Expose git commit data
+      uses: rlespinasse/git-commit-data-action@v1
     
     - name: Build the Docker image
-      run: docker build -t "${{ secrets.DOCKERHUB_USERNAME }}/petclinic:v1" .
+      run: docker build -t "${{ secrets.DOCKERHUB_USERNAME }}/petclinic:${{ env.GIT_COMMIT_SHORT_SHA }}" .
 
     - name: Check Image
       run: docker images
@@ -24,7 +27,7 @@ jobs:
       run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Push Docker Image
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/petclinic:v1 
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/petclinic:${{ env.GIT_COMMIT_SHORT_SHA }} 
 
     
 
