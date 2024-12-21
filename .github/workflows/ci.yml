@@ -15,8 +15,16 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Build the Docker image
-      run: docker build -t "ikambarov/petclinic:v1" .
+      run: docker build -t "${{ secrets.DOCKERHUB_USERNAME }}/petclinic:v1" .
 
     - name: Check Image
       run: docker images
+
+    - name: Docker Login
+      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Push Docker Image
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/petclinic:v1 
+
+    
 
